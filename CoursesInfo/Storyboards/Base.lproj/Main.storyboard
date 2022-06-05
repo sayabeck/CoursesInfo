@@ -63,6 +63,8 @@
                         <segue destination="E6D-0d-lgP" kind="show" identifier="showImage" id="Hr7-hn-OVW"/>
                         <segue destination="Ldo-gL-hIO" kind="show" identifier="showCourses" id="aT6-r3-r1K"/>
                         <segue destination="Ldo-gL-hIO" kind="show" identifier="showCoursesV2" id="ihY-Gb-V5W"/>
+                        <segue destination="Ldo-gL-hIO" kind="show" identifier="alamofireGet" id="mkx-Tb-OKQ"/>
+                        <segue destination="Ldo-gL-hIO" kind="show" identifier="alamofirePost" id="kBo-SU-MPo"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g56-eG-Xw9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -204,7 +206,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="aT6-r3-r1K"/>
+        <segue reference="kBo-SU-MPo"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">

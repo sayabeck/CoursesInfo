@@ -65,5 +65,36 @@ class CoursesViewController: UITableViewController {
             }
         }
     }
+    
+    func alamofireGetButtonPressed() {
+        NetworkManager.shared.fetchDataWithAlamofire(from: Link.exampleTwo.rawValue) { result in
+            switch result {
+            case .success(let courses):
+                self.courses = courses
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+    }
+    
+    func alamofirePostButtonPressed() {
+        let course = CourseV3(
+            name: "Networking",
+            imageUrl: Link.courseImageURL.rawValue,
+            numberOfLessons: "10",
+            numberOfTests: "8")
+        
+        NetworkManager.shared.postDataWithAlamofire(with: course, to: Link.postRequest.rawValue) { result in
+            switch result {
+            case .success(let course):
+                self.courses.append(course)
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 
 }

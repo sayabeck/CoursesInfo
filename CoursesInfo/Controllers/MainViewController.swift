@@ -17,6 +17,8 @@ enum UserAction: String, CaseIterable {
     case ourCoursesV2 = "Capital to Lowcase"
     case postRequestWithDict = "Post RQST with Dict"
     case postRequestWithModel = "POST RQST with Model"
+    case alamofireGet = "Alamofire GET"
+    case alamofirePost = "Alamofire POST"
 }
 
 class MainViewController: UICollectionViewController {
@@ -37,6 +39,8 @@ class MainViewController: UICollectionViewController {
             switch segue.identifier {
             case "showCourses": coursesVC.fetchCourses()
             case "showCoursesV2": coursesVC.fetchCoursesV2()
+            case "alamofireGet": coursesVC.alamofireGetButtonPressed()
+            case "alamofirePost": coursesVC.alamofirePostButtonPressed()
             default: break
             }
         }
@@ -74,6 +78,8 @@ class MainViewController: UICollectionViewController {
         case .ourCoursesV2: performSegue(withIdentifier: "showCoursesV2", sender: nil)
         case .postRequestWithDict: postRequestWithDict()
         case .postRequestWithModel: postRequestWithModel()
+        case .alamofireGet: performSegue(withIdentifier: "alamofireGet", sender: nil)
+        case .alamofirePost: performSegue(withIdentifier: "alamofirePost", sender: nil)
         }
     }
 

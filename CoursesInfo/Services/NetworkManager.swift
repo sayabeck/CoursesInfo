@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum Link: String {
     case imageURL = "https://applelives.com/wp-content/uploads/2016/03/iPhone-SE-11.jpeg"
@@ -15,6 +16,7 @@ enum Link: String {
     case exampleFour = "https://swiftbook.ru//wp-content/uploads/api/api_missing_or_wrong_fields"
     case exampleFive = "https://swiftbook.ru//wp-content/uploads/api/api_courses_capital"
     case postRequest = "https://jsonplaceholder.typicode.com/posts"
+    case courseImageURL = "https://swiftbook.ru/wp-content/uploads/sites/2/2018/08/notifications-course-with-background.png"
 }
 
 enum NetworkError: Error {
@@ -140,5 +142,42 @@ class NetworkManager {
                 completion(.failure(.decodingError))
             }
         }.resume()
+    }
+    
+    func fetchDataWithAlamofire(from url: String, completion: @escaping (Result<[Course], NetworkError>) -> Void) {
+        AF.request(Link.exampleTwo.rawValue)
+            .validate()
+            .responseJSON { dataResponse in
+                switch dataResponse.result {
+                case .success(let value):
+                    let courses = Course.getCourses(from: value)
+                    DispatchQueue.main.async {
+                        completion(.success(courses))
+                    }
+                case .failure:
+                    completion(.failure(.decodingError))
+                }
+            }
+    }
+    
+    func postDataWithAlamofire(with data: CourseV3, to url: String, completion: @escaping (Result<Course, NetworkError>) -> Void) {
+        AF.request(url, method: .post, parameters: data)
+            .validate()
+            .responseDecodable (of: CourseV3.self) { dataResponse in
+                switch dataResponse.result {
+                case .success(let coursesV3):
+                    let course = Course(
+                        name: coursesV3.name,
+                        imageUrl: coursesV3.imageUrl,
+                        numberOfLessons: Int(coursesV3.numberOfLessons) ?? 0,
+                        numberOfTests: Int(coursesV3.numberOfTests) ?? 0
+                    )
+                    DispatchQueue.main.async {
+                        completion(.success(course))
+                    }
+                case .failure:
+                    completion(.failure(.decodingError))
+                }
+            }
     }
 }
