@@ -14,6 +14,9 @@ enum UserAction: String, CaseIterable {
     case exampleThree = "Example Three"
     case exampleFour = "Example Four"
     case ourCourses = "Our Courses"
+    case ourCoursesV2 = "Capital to Lowcase"
+    case postRequestWithDict = "Post RQST with Dict"
+    case postRequestWithModel = "POST RQST with Model"
 }
 
 class MainViewController: UICollectionViewController {
@@ -29,9 +32,13 @@ class MainViewController: UICollectionViewController {
 //MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showCourses" {
-            guard let coursesVC = segue.destination as? CoursesViewController else { return }
-            coursesVC.fetchCourses()
+        if segue.identifier != "showImage" {
+            let coursesVC = segue.destination as! CoursesViewController
+            switch segue.identifier {
+            case "showCourses": coursesVC.fetchCourses()
+            case "showCoursesV2": coursesVC.fetchCoursesV2()
+            default: break
+            }
         }
     }
     
@@ -64,6 +71,9 @@ class MainViewController: UICollectionViewController {
         case .exampleThree: exampleThreePressed()
         case .exampleFour: exampleFourPressed()
         case .ourCourses: performSegue(withIdentifier: "showCourses", sender: nil)
+        case .ourCoursesV2: performSegue(withIdentifier: "showCoursesV2", sender: nil)
+        case .postRequestWithDict: postRequestWithDict()
+        case .postRequestWithModel: postRequestWithModel()
         }
     }
 
@@ -156,6 +166,44 @@ extension MainViewController {
             case .failure(let error):
                 print(error.localizedDescription)
                 self.failedAlert()
+            }
+        }
+    }
+    
+    private func postRequestWithDict() {
+        let course = [
+            "name": "Networking",
+            "imageUrl": "image url",
+            "numberOfLessons": "11",
+            "numberOfTests": "9"
+        ]
+        NetworkManager.shared.postRequest(with: course, to: Link.postRequest.rawValue) { result in
+            switch result {
+            case .success(let course):
+                self.successAlert()
+                print(course)
+            case .failure(let error):
+                self.failedAlert()
+                print(error)
+            }
+        }
+    }
+    
+    private func postRequestWithModel() {
+        let course = CourseV3(
+            name: "Networking",
+            imageUrl: Link.imageURL.rawValue,
+            numberOfLessons: "10",
+            numberOfTests: "8")
+        
+        NetworkManager.shared.postRequest(with: course, to: Link.postRequest.rawValue) { result in
+            switch result {
+            case .success(let course):
+                self.successAlert()
+                print(course)
+            case .failure(let error):
+                self.failedAlert()
+                print(error)
             }
         }
     }
